@@ -60,7 +60,7 @@ let ball = {
     dy: -ballSpeed
 }
 //Главный цикл игры
-function loop(){
+function loop() {
 
     //Очищаем игровое поле
     requestAnimationFrame(loop);
@@ -71,24 +71,24 @@ function loop(){
     rightPaddle.y += rightPaddle.dy;
     //Проверка выхода за границы холста левой платформы
     //Ушла ли платформа вверх
-    if(leftPaddle.y <= grid){
+    if (leftPaddle.y <= grid) {
         leftPaddle.y = grid;
-        leftPaddle.dy = paddleSpeed   
-        
+        leftPaddle.dy = paddleSpeed
+
     }
     //Ушла ли платформа вниз
-    if(leftPaddle.y > maxLeftPaddleY){
+    if (leftPaddle.y > maxLeftPaddleY) {
         leftPaddle.y = maxLeftPaddleY;
-        leftPaddle.dy = -paddleSpeed 
+        leftPaddle.dy = -paddleSpeed
     }
 
     //Проверка выхода за границы холста правой платформы
     //Ушла ли платформа вверх
-    if(rightPaddle.y <= grid){
+    if (rightPaddle.y <= grid) {
         rightPaddle.y = grid;
     }
     //Ушла ли платформа вниз
-    if(rightPaddle.y > maxRightPaddleY){
+    if (rightPaddle.y > maxRightPaddleY) {
         rightPaddle.y = maxRightPaddleY;
     }
 
@@ -99,103 +99,103 @@ function loop(){
     context.fillRect(rightPaddle.x, rightPaddle.y, rightPaddle.width, rightPaddle.height);
     context.fillRect(0, 0, canvas.width, grid);
     context.fillRect(0, canvas.height - grid, canvas.width, grid);
-    for(let i = grid; i < canvas.height - grid; i += grid*2)
+    for (let i = grid; i < canvas.height - grid; i += grid * 2)
         context.fillRect(canvas.width / 2 - grid / 2, i, grid, grid);
-    
+
     //Задаем цвет
     context.fillStyle = 'green';
     //Рисуем мяч
     context.fillRect(ball.x, ball.y, ball.width, ball.height);
-    
+
     //Если мяч двигался, то пусть продолжает
-    if (randomNumber <= 5){
+    if (randomNumber <= 5) {
         ball.x += ball.dx;
-    }else{
+    }
+    else {
         ball.x -= ball.dx;
     }
     ball.y += ball.dy;
     //Если мяч коснулся стенки направляем его в противоположную сторону
-    if ( (ball.y <= grid) || (ball.y + grid >= canvas.height - grid)) {
+    if ((ball.y <= grid) || (ball.y + grid >= canvas.height - grid)) {
         ball.dy *= -1;
         sound()
     }
 
-        
+
     //Отслеживаем нажатия клавишь
-    document.addEventListener("keydown", function(e){
+    document.addEventListener("keydown", function (e) {
         //Если нажата стрелка вверх
-        if(e.which == 38){
+        if (e.which == 38) {
             //Двигаем правую платформу вверх
             rightPaddle.dy = -paddleSpeed;
         }
         //Иначе если нажата стрелка вниз
-        else if(e.which == 40){
+        else if (e.which == 40) {
             //Двигаем правую платформу вниз
             rightPaddle.dy = paddleSpeed;
         }
-
-        }
     })
-    document.addEventListener("keyup", function(e){
+
+    document.addEventListener("keyup", function (e) {
         //Если отпущена стрелка вверх
-        if(e.which == 38){
+        if (e.which == 38) {
             //Двигаем правую платформу вверх
             rightPaddle.dy = 0;
         }
         //Иначе если отпущена стрелка вниз
-        else if(e.which == 40){
+        else if (e.which == 40) {
             //Двигаем правую платформу вниз
             rightPaddle.dy = 0;
         }
         //Иначе если отпущена W
-        else if(e.which == 87){
+        else if (e.which == 87) {
             //Двигаем левую платформу вверх
             leftPaddle.dy = 0;
         }
         //Иначе если отпущена S
-        else if(e.which == 83){
+        else if (e.which == 83) {
             //Двигаем левую платформу вниз
             leftPaddle.dy = 0;
         }
     })
     //Если мяч коснулся платформ
-    if (collides(ball, rightPaddle)||collides(ball, leftPaddle)){
+    if (collides(ball, rightPaddle) || collides(ball, leftPaddle)) {
         ball.dx *= -1;
         sound()
     }
-        //Если мяч вылетел за границы игрового поля
-        if ((ball.x < 0 || ball.x > canvas.width) && !ball.restarting){
-            ball.restarting = true
-            alert('Game over!Restart?');
-            //Даём секунду игроку
-            setTimeout(()=>{
-                ball.restarting = false
+    //Если мяч вылетел за границы игрового поля
+    if ((ball.x < 0 || ball.x > canvas.width) && !ball.restarting) {
+        ball.restarting = true
+        alert('Game over!Restart?');
+        //Даём секунду игроку
+        setTimeout(() => {
+            ball.restarting = false
             //Ставим шарик в начальное положение
             ball.x = canvas.width / 2;
             ball.y = canvas.height / 2;
-            }, 1000)
-            
-        
-        }
-        
+        }, 1000)
+
+
+    }
+
 }
 
 //Запуск игры
 requestAnimationFrame(loop);
 
 //Функция проверки пересечения платформ
-function collides(object1, object2){
+function collides(object1, object2) {
     return object1.x < object2.x + object2.width &&
-           object1.x + object1.width > object2.x &&
-           object1.y < object2.y + object2.height &&
-           object1.y + object1.height > object2.y;
+        object1.x + object1.width > object2.x &&
+        object1.y < object2.y + object2.height &&
+        object1.y + object1.height > object2.y;
 }
 
-function end(){
-    
+function end() {
+
 }
 //Запуск звука
-function sound(){
+function sound() {
     let audio = new Audio()
     audio.src = "src/music/pop.mp3"
     audio.autoplay = true
